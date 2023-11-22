@@ -1,18 +1,25 @@
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.common.by import By
-import time
 import os
+import time
 
+from selenium import webdriver
+from selenium.webdriver.chrome.service import Service
+from selenium.webdriver.common.by import By
+from selenium.webdriver.common.keys import Keys
 
 ACCOUNT_EMAIL = os.environ["EMAIL"]
 ACCOUNT_PASSWORD = os.environ["PASSWORD"]
 
 # Optional - Keep the browser open (helps diagnose issues if the script crashes)
+service = Service(
+  executable_path="/home/runner/Day49-Intermediate-Automating-Job-Applications-on-Linkedin/.pythonlibs/chromedriver-Linux64"
+  #'/home/runner/.cache/selenium/chromedriver/linux64/119.0.6045.105/chromedriver'
+)
 chrome_options = webdriver.ChromeOptions()
 chrome_options.add_experimental_option("detach", True)
 
-driver = webdriver.Chrome(chrome_options)
+driver = webdriver.Chrome(service=service, options=chrome_options)
+#  executable_path="/home/runner/.cache/selenium/chromedriver/linux64/119.0.6045.105/chromedriver", 
+#  chrome_options=chrome_options)
 
 driver.get(
     "https://www.linkedin.com/jobs/search/?f_LF=f_AL&geoId=102257491"
@@ -23,7 +30,8 @@ driver.get(
 
 # Click Reject Cookies Button
 time.sleep(2)
-reject_button = driver.find_element(by=By.CSS_SELECTOR, value='button[action-type="DENY"]')
+reject_button = driver.find_element(by=By.CSS_SELECTOR, 
+                                    value='button[action-type="DENY"]')
 reject_button.click()
 
 # Click Sign in Button
